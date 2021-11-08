@@ -1,5 +1,9 @@
 'use strict';
 // console.log('linked');
+const img1 = document.getElementById('img1');
+const img2 = document.getElementById('img2');
+const img3 = document.getElementById('img3');
+let index = 0;
 
 function Product(productName, fileExt) {
     this.productName = productName;
@@ -12,10 +16,12 @@ function Product(productName, fileExt) {
 
 Product.productList = [];
 
-const img1 = document.getElementById('img1');
-const img2 = document.getElementById('img2');
-const img3 = document.getElementById('img3');
-let index = 0;
+//create a function that uses product list array to display 3 unique images
+
+function randomImgIndex(){
+    return Math.trunc(Math.random() * Product.productList.length);
+}
+
 
 function imgtest() {
     img1.src = Product.productList[index].imgPath;
@@ -43,3 +49,9 @@ const watercan = new Product('water-can', 'jpg');
 const wineglass = new Product('wine-glass', 'jpg');
 
 img1.addEventListener('click', imgtest);
+
+let cnt = 0
+while (cnt < 100){
+    console.log(randomImgIndex());
+    cnt += 1;
+}
