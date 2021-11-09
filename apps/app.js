@@ -1,10 +1,13 @@
 'use strict';
 // console.log('linked');
+const allImages = document.getElementById('product-images');
 const img1El = document.getElementById('img1');
 const img2El = document.getElementById('img2');
 const img3El = document.getElementById('img3');
+const progress = document.getElementById('progress-tracker');
+let pt = 0;
 let imgIndexArray = [];
-const rounds = 5;
+const rounds = 25;
 let selectionCount = 0;
 
 function Product(productName, fileExt) {
@@ -23,7 +26,6 @@ Product.prototype.randomImgIndex = function(){
     return Math.trunc(Math.random() * Product.productList.length);
 }
 
-
 //creates a random index number for images 1 through 3. Where img 2 index cannot equal img 1 index, and img 3 index cannot equal img 1 or img 2 index.
 //outputs an imgIndexArray which is referenced for rendering the images, each image that is rendered increases the countShown value for that image.
 Product.prototype.selectImage = function() {
@@ -38,30 +40,57 @@ Product.prototype.selectImage = function() {
         img3Index = Product.prototype.randomImgIndex();
     }
     imgIndexArray = [img1Index, img2Index, img3Index];
-    Product.productList[img1Index].countShown += 1;
-    Product.productList[img2Index].countShown += 1;
-    Product.productList[img3Index].countShown += 1;
-    console.log('count shown for images',Product.productList[img1Index].countShown, Product.productList[img2Index].countShown, Product.productList[img3Index].countShown);
-}
-
-Product.prototype.trackClick = function (imgNum) {
-    if (imgNum === img1){
-        Product.productList[imgIndexArray[0]].countClicked += 1;
-        console.log(Product.productList[imgIndexArray[0]].productName, Product.productList[imgIndexArray[0]].countClicked);
-    } else if (imgNum === img2){
-        Product.productList[imgIndexArray[1]].countClicked += 1;
-        console.log(Product.productList[imgIndexArray[1]].productName, Product.productList[imgIndexArray[1]].countClicked);
-    } else {
-        Product.productList[imgIndexArray[2]].countClicked += 1;
-        console.log(Product.productList[imgIndexArray[2]].productName, Product.productList[imgIndexArray[2]].countClicked);
+    for (let i = 0; i < imgIndexArray.length; i += 1){
+        Product.productList[imgIndexArray[i]].countShown += 1;
     }
+    // console.log('count shown for images',Product.productList[img1Index].countShown, Product.productList[img2Index].countShown, Product.productList[img3Index].countShown);
 }
 
 Product.prototype.renderImg = function () {
     Product.prototype.selectImage();
+    progress.textContent = `${pt} image sets out of ${rounds} complete`;
     img1.src = Product.productList[imgIndexArray[0]].imgPath;
     img2.src = Product.productList[imgIndexArray[1]].imgPath;
     img3.src = Product.productList[imgIndexArray[2]].imgPath;
+}
+
+function handleImgSelection(event) {
+    const id = event.target.id;
+    if (selectionCount < rounds){
+        if(id === 'img1'){
+            Product.productList[imgIndexArray[0]].countClicked += 1;
+            // console.log(Product.productList[imgIndexArray[0]].productName, Product.productList[imgIndexArray[0]].countClicked);
+            pt += 1;
+            Product.prototype.renderImg();
+            selectionCount += 1;
+        } else if (id === 'img2'){
+            Product.productList[imgIndexArray[1]].countClicked += 1;
+            // console.log(Product.productList[imgIndexArray[1]].productName, Product.productList[imgIndexArray[1]].countClicked);
+            pt += 1;
+            Product.prototype.renderImg();
+            selectionCount += 1;
+        } else if (id === 'img3'){
+            Product.productList[imgIndexArray[2]].countClicked += 1;
+            // console.log(Product.productList[imgIndexArray[2]].productName, Product.productList[imgIndexArray[2]].countClicked);
+            pt += 1;
+            Product.prototype.renderImg();
+            selectionCount += 1;
+        } 
+    } else {
+        document.querySelector('#view-results').classList.remove('hidden');
+        allImages.removeEventListener('click', handleImgSelection);
+    }
+}
+
+function renderResults() {
+    const sectionEl = document.querySelector('#results');
+    const ulEl = document.createElement('ul');
+    sectionEl.appendChild(ulEl);
+    for(let i = 0; i < Product.productList.length; i += 1){
+        const liEl = document.createElement('li');
+        ulEl.appendChild(liEl);
+        liEl.textContent = `${Product.productList[i].productName} had ${Product.productList[i].countClicked} votes, and was seen ${Product.productList[i].countShown} times.`
+    }
 }
 
 const bag = new Product('bag', 'jpg');
@@ -87,23 +116,7 @@ const wineglass = new Product('wine-glass', 'jpg');
 
 //Execution order
 Product.prototype.renderImg();
-img1.addEventListener('click', () => {
-    Product.prototype.trackClick(img1);
-    Product.prototype.renderImg();
-    selectionCount += 1;
-});
-img2.addEventListener('click', () => {
-    Product.prototype.trackClick(img2);
-    Product.prototype.renderImg();
-    selectionCount += 1;
-});
-img3.addEventListener('click', () => {
-    Product.prototype.trackClick(img3);
-    Product.prototype.renderImg();
-    selectionCount += 1;
-});
+allImages.addEventListener('click', handleImgSelection);
+document.querySelector('#view-results').addEventListener('click', renderResults);
 
-
-
-// alert(`all ${rounds} complete thanks!`)
 
