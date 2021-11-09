@@ -13,8 +13,8 @@ Product.list = [];
 Product.left = null;
 Product.cntr = null;
 Product.right = null;
-Product.surveyRound = 0;
-Product.ttlSurveyRounds = 5;
+Product.currentRound = 0;
+Product.ttlRounds = 5;
 
 Product.prototype.render = function (position){
     const imgEl = document.getElementById(`${position}-position`)
@@ -57,18 +57,18 @@ function renderProducts () {
 function handleProductSurvey(event) {
     const id = event.target.id;
 
-    if (Product.surveyRound < Product.ttlSurveyRounds){
+    if (Product.currentRound < Product.ttlRounds){
         if(id === 'left-position'){
             Product.left.countClicked += 1;
-            Product.surveyRound += 1;
+            Product.currentRound += 1;
             renderProducts();
         } else if (id === 'cntr-position'){
             Product.cntr.countClicked += 1;
-            Product.surveyRound += 1;
+            Product.currentRound += 1;
             renderProducts();
         } else if (id === 'right-position'){
             Product.right.countClicked += 1;
-            Product.surveyRound += 1;
+            Product.currentRound += 1;
             renderProducts();
         } 
     } else {
@@ -102,29 +102,30 @@ function addViewResultsBtn () {
     document.querySelector('#view-results').classList.remove('hidden');
     document.querySelector('#view-results').addEventListener('click', renderResults);
 }
-
-const bag = new Product('bag', 'jpg');
-const banana = new Product('banana', 'jpg');
-const bathroom = new Product('bathroom', 'jpg');
-const boots = new Product('boots', 'jpg');
-const breakfast = new Product('breakfast', 'jpg');
-const bubblegum = new Product('bubblegum', 'jpg');
-const chair = new Product('chair', 'jpg');
-const cthulhu = new Product('cthulhu', 'jpg');
-const dogduck = new Product('dog-duck', 'jpg');
-const dragon = new Product('dragon', 'jpg');
-const pen = new Product('pen', 'jpg');
-const petsweep = new Product('pet-sweep', 'jpg');
-const scissors = new Product('scissors', 'jpg');
-const shark = new Product('shark', 'jpg');
-const sweep = new Product('sweep', 'png');
-const tauntaun = new Product('tauntaun', 'jpg');
-const unicorn = new Product('unicorn', 'jpg');
-const watercan = new Product('water-can', 'jpg');
-const wineglass = new Product('wine-glass', 'jpg');
-
+function genProducts() {
+    new Product('bag', 'jpg');
+    new Product('banana', 'jpg');
+    new Product('bathroom', 'jpg');
+    new Product('boots', 'jpg');
+    new Product('breakfast', 'jpg');
+    new Product('bubblegum', 'jpg');
+    new Product('chair', 'jpg');
+    new Product('cthulhu', 'jpg');
+    new Product('dog-duck', 'jpg');
+    new Product('dragon', 'jpg');
+    new Product('pen', 'jpg');
+    new Product('pet-sweep', 'jpg');
+    new Product('scissors', 'jpg');
+    new Product('shark', 'jpg');
+    new Product('sweep', 'png');
+    new Product('tauntaun', 'jpg');
+    new Product('unicorn', 'jpg');
+    new Product('water-can', 'jpg');
+    new Product('wine-glass', 'jpg');
+}
 
 //Execution order
+genProducts();
 addProductEventListener();
 renderProducts();
 
