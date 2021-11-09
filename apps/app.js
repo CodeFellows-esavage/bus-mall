@@ -1,9 +1,9 @@
 'use strict';
 // console.log('linked');
 const allImages = document.getElementById('product-images');
-const img1El = document.getElementById('img1');
-const img2El = document.getElementById('img2');
-const img3El = document.getElementById('img3');
+// const img1El = document.getElementById('img1');
+// const img2El = document.getElementById('img2');
+// const img3El = document.getElementById('img3');
 const progress = document.getElementById('progress-tracker');
 let pt = 0;
 let imgIndexArray = [];
@@ -24,6 +24,13 @@ Product.left = null;
 Product.cntr = null;
 Product.right = null;
 
+
+Product.prototype.render = function (position){
+    const imgEl = document.getElementById(`${position}`)
+    imgEl.src = this.imgPath;
+    imgEl.alt = this.productName;
+}
+
 //Generates a random index number for the product lis array length
 function randomProduct() {
     const listIndex = Math.trunc(Math.random() * Product.list.length);
@@ -32,7 +39,7 @@ function randomProduct() {
 
 //creates a random index number for images 1 through 3. Where img 2 index cannot equal img 1 index, and img 3 index cannot equal img 1 or img 2 index.
 //outputs an imgIndexArray which is referenced for rendering the images, each image that is rendered increases the countShown value for that image.
-Product.prototype.selectImage = function() {
+function selectProducts() {
     Product.left = randomProduct();
 
     do {
@@ -47,12 +54,12 @@ Product.prototype.selectImage = function() {
     // console.log('count shown for images',Product.list[img1Index].countShown, Product.list[img2Index].countShown, Product.list[img3Index].countShown);
 
 
-Product.prototype.renderImg = function () {
-    Product.prototype.selectImage();
+function renderProducts () {
+    selectProducts();
     progress.textContent = `${pt} image sets out of ${rounds} complete`;
-    img1.src = Product.left.imgPath;
-    img2.src = Product.cntr.imgPath;
-    img3.src = Product.right.imgPath;
+    Product.left.render('img1');
+    Product.cntr.render('img2');
+    Product.right.render('img3');
 }
 
 function handleImgSelection(event) {
@@ -116,7 +123,7 @@ const wineglass = new Product('wine-glass', 'jpg');
 
 
 //Execution order
-Product.prototype.renderImg();
+renderProducts();
 allImages.addEventListener('click', handleImgSelection);
 document.querySelector('#view-results').addEventListener('click', renderResults);
 
