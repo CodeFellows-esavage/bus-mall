@@ -15,7 +15,7 @@ Product.cntr = null;
 Product.right = null;
 Product.lastValues = [];
 Product.currentRound = 0;
-Product.ttlRounds = 25;
+Product.ttlRounds = 5;
 
 
 Product.prototype.render = function (position){
@@ -54,9 +54,11 @@ function selectProducts() {
             }
         }
     }
-    //TODO while loop in while loop
     for (let i = 0; i < Product.lastValues.length; i += 1){
-        while (Product.cntr === Product.lastValues[i] || Product.left === Product.cntr){
+        while(Product.left === Product.cntr){
+            Product.cntr = randomProduct();
+        }
+        while (Product.cntr === Product.lastValues[i]){
             if (i === 0){
                 Product.cntr = randomProduct();
             } else{
@@ -65,9 +67,11 @@ function selectProducts() {
             }
         }
     }
-    //TODO while loop in while loop
     for (let i = 0; i < Product.lastValues.length; i += 1){
-        while (Product.right === Product.lastValues[i] || Product.right === Product.left || Product.right === Product.cntr){
+        while(Product.right === Product.left || Product.right === Product.cntr){
+            Product.right = randomProduct();
+        }
+        while (Product.right === Product.lastValues[i]){
             if (i === 0){
                 Product.right = randomProduct();
             } else{
@@ -190,19 +194,19 @@ function genProducts() {
     new Product('boots', 'jpg');
     new Product('breakfast', 'jpg');
     new Product('bubblegum', 'jpg');
-    new Product('chair', 'jpg');
-    new Product('cthulhu', 'jpg');
-    new Product('dog-duck', 'jpg');
-    new Product('dragon', 'jpg');
-    new Product('pen', 'jpg');
-    new Product('pet-sweep', 'jpg');
-    new Product('scissors', 'jpg');
-    new Product('shark', 'jpg');
-    new Product('sweep', 'png');
-    new Product('tauntaun', 'jpg');
-    new Product('unicorn', 'jpg');
-    new Product('water-can', 'jpg');
-    new Product('wine-glass', 'jpg');
+    // new Product('chair', 'jpg');
+    // new Product('cthulhu', 'jpg');
+    // new Product('dog-duck', 'jpg');
+    // new Product('dragon', 'jpg');
+    // new Product('pen', 'jpg');
+    // new Product('pet-sweep', 'jpg');
+    // new Product('scissors', 'jpg');
+    // new Product('shark', 'jpg');
+    // new Product('sweep', 'png');
+    // new Product('tauntaun', 'jpg');
+    // new Product('unicorn', 'jpg');
+    // new Product('water-can', 'jpg');
+    // new Product('wine-glass', 'jpg');
 }
 
 //Execution order
