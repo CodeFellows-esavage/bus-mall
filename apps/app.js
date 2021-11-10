@@ -13,8 +13,10 @@ Product.list = [];
 Product.left = null;
 Product.cntr = null;
 Product.right = null;
+Product.lastValues = [];
 Product.currentRound = 0;
 Product.ttlRounds = 5;
+
 
 Product.prototype.render = function (position){
     const imgEl = document.getElementById(`${position}-position`)
@@ -32,17 +34,46 @@ function randomProduct() {
 
 //creates a random index number for images 1 through 3. Where img 2 index cannot equal img 1 index, and img 3 index cannot equal img 1 or img 2 index.
 //outputs an imgIndexArray which is referenced for rendering the images, each image that is rendered increases the countShown value for that image.
-function selectProducts() {
-    Product.left = randomProduct();
 
-    do {
-        Product.cntr = randomProduct();
-    } while (Product.left === Product.cntr)
-    
-    do {
-        Product.right = randomProduct();
-    } while (Product.right === Product.left || Product.right === Product.cntr)
-}
+function selectProducts() {
+    Product.lastValues = [Product.left, Product.cntr, Product.right];
+
+    Product.left = randomProduct();
+    Product.cntr = randomProduct();
+    Product.right = randomProduct();
+
+    for (let i = 0; i < Product.lastValues.length; i += 1){
+        while(Product.left === Product.lastValues[i]){
+            if (i === 0){
+                Product.left = randomProduct();
+            } else{
+                Product.left = randomProduct();
+                i = 0;
+            }
+        }
+    }
+    for (let i = 0; i < Product.lastValues.length; i += 1){
+        while (Product.cntr === Product.lastValues[i] || Product.left === Product.cntr){
+            if (i === 0){
+                Product.cntr = randomProduct();
+            } else{
+                Product.cntr = randomProduct();
+                i = 0;
+            }
+        }
+    }
+    for (let i = 0; i < Product.lastValues.length; i += 1){
+        while (Product.right === Product.lastValues[i] || Product.right === Product.left || Product.right === Product.cntr){
+            if (i === 0){
+                Product.right = randomProduct();
+            } else{
+                Product.right = randomProduct();
+                i = 0;
+            }
+        }
+    } 
+}   
+
 
 function renderProducts () {
     const progress = document.getElementById('progress-tracker');
