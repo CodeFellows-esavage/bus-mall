@@ -15,7 +15,7 @@ Product.cntr = null;
 Product.right = null;
 Product.lastValues = [];
 Product.currentRound = 0;
-Product.ttlRounds = 5;
+Product.ttlRounds = 25;
 
 
 Product.prototype.render = function (position){
@@ -81,7 +81,7 @@ function selectProducts() {
 
 function renderProducts () {
     const progress = document.getElementById('progress-tracker');
-    progress.textContent = `${Product.surveyRound} image sets out of ${Product.ttlSurveyRounds} complete`;
+    progress.textContent = `${Product.currentRound} image sets out of ${Product.ttlRounds} complete`;
 
     selectProducts();
     Product.left.render('left');
