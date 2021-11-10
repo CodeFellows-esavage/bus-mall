@@ -3,7 +3,7 @@
 function Product(productName, fileExt) {
     this.productName = productName;
     this.imgPath = `imgs/${productName}.${fileExt}`;
-    this.countShown = 0;
+    this.countViewed = 0;
     this.countClicked = 0;
 
     Product.list.push(this);
@@ -23,7 +23,7 @@ Product.prototype.render = function (position){
     imgEl.src = this.imgPath;
     imgEl.alt = this.productName;
     
-    this.countShown += 1;
+    this.countViewed += 1;
 }
 
 //Generates a random index number for the product lis array length
@@ -33,7 +33,7 @@ function randomProduct() {
 }
 
 //creates a random index number for images 1 through 3. Where img 2 index cannot equal img 1 index, and img 3 index cannot equal img 1 or img 2 index.
-//outputs an imgIndexArray which is referenced for rendering the images, each image that is rendered increases the countShown value for that image.
+//outputs an imgIndexArray which is referenced for rendering the images, each image that is rendered increases the countViewed value for that image.
 
 function selectProducts() {
     Product.lastValues = [Product.left, Product.cntr, Product.right];
@@ -134,7 +134,7 @@ function renderResults() {
     for(let i = 0; i < Product.list.length; i += 1){
         const liEl = document.createElement('li');
         ulEl.appendChild(liEl);
-        liEl.textContent = `${Product.list[i].productName} had ${Product.list[i].countClicked} votes, and was seen ${Product.list[i].countShown} times.`
+        liEl.textContent = `${Product.list[i].productName} had ${Product.list[i].countClicked} votes, and was seen ${Product.list[i].countViewed} times.`
     }
     renderChart();
 }
@@ -142,24 +142,34 @@ function renderResults() {
 function renderChart(){
     const productNames = [];
     const productClicks = [];
+    const productViews = [];
 
     for (let i = 0; i < Product.list.length; i += 1){
         productNames.push(Product.list[i].productName);
         productClicks.push(Product.list[i].countClicked);
+        productViews.push(Product.list[i].countViewed);
     }
 
     const context = document.getElementById('results-chart').getContext('2d');
     const productChart = new Chart(context, {
-        type: 'bar',
+        type: 'horizontalBar',
 
         data: {
             labels: productNames,
-            datasets: [{
+            datasets: [
+                {
                 label: 'Product Clicks',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: productClicks
-            }]
+                },
+                {
+                label: 'Product Views',
+                backgroundColor: 'rgb(66, 135, 245)',
+                borderColor: 'rgb(66, 135, 245)',
+                data: productViews    
+                }
+            ]
         },
         options: {
             scales: {
