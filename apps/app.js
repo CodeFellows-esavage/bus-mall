@@ -38,6 +38,8 @@ function randomProduct() {
 function selectProducts() {
     Product.lastValues = [Product.left, Product.cntr, Product.right];
 
+    //TODO maybe make a cannot use array, push new left value into current array being checked then check cntr against this new array of 4 items, then push the cntr value into the cannot use arry and check the right against the new array of 5
+
     Product.left = randomProduct();
     Product.cntr = randomProduct();
     Product.right = randomProduct();
@@ -52,6 +54,7 @@ function selectProducts() {
             }
         }
     }
+    //TODO while loop in while loop
     for (let i = 0; i < Product.lastValues.length; i += 1){
         while (Product.cntr === Product.lastValues[i] || Product.left === Product.cntr){
             if (i === 0){
@@ -62,6 +65,7 @@ function selectProducts() {
             }
         }
     }
+    //TODO while loop in while loop
     for (let i = 0; i < Product.lastValues.length; i += 1){
         while (Product.right === Product.lastValues[i] || Product.right === Product.left || Product.right === Product.cntr){
             if (i === 0){
@@ -108,17 +112,6 @@ function handleProductSurvey(event) {
     }
 }
 
-function renderResults() {
-    const sectionEl = document.querySelector('#results');
-    const ulEl = document.createElement('ul');
-    sectionEl.appendChild(ulEl);
-    for(let i = 0; i < Product.list.length; i += 1){
-        const liEl = document.createElement('li');
-        ulEl.appendChild(liEl);
-        liEl.textContent = `${Product.list[i].productName} had ${Product.list[i].countClicked} votes, and was seen ${Product.list[i].countShown} times.`
-    }
-}
-
 function addProductEventListener() {
     const allImages = document.getElementById('product-images');
     allImages.addEventListener('click', handleProductSurvey);
@@ -133,6 +126,53 @@ function addViewResultsBtn () {
     document.querySelector('#view-results').classList.remove('hidden');
     document.querySelector('#view-results').addEventListener('click', renderResults);
 }
+
+function renderResults() {
+    const sectionEl = document.querySelector('#results');
+    const ulEl = document.createElement('ul');
+    sectionEl.appendChild(ulEl);
+    for(let i = 0; i < Product.list.length; i += 1){
+        const liEl = document.createElement('li');
+        ulEl.appendChild(liEl);
+        liEl.textContent = `${Product.list[i].productName} had ${Product.list[i].countClicked} votes, and was seen ${Product.list[i].countShown} times.`
+    }
+    renderChart();
+}
+
+function renderChart(){
+    const productNames = [];
+    const productClicks = [];
+
+    for (let i = 0; i < Product.list.length; i += 1){
+        productNames.push(Product.list[i].productName);
+        productClicks.push(Product.list[i].countClicked);
+    }
+
+    const context = document.getElementById('results-chart').getContext('2d');
+    const productChart = new Chart(context, {
+        type: 'bar',
+
+        data: {
+            labels: productNames,
+            datasets: [{
+                label: 'Product Clicks',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: productClicks
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+}
+
 function genProducts() {
     new Product('bag', 'jpg');
     new Product('banana', 'jpg');
