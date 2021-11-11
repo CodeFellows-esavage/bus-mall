@@ -15,7 +15,7 @@ Product.cntr = null;
 Product.right = null;
 Product.lastValues = [];
 Product.currentRound = 0;
-Product.ttlRounds = 5;
+Product.ttlRounds = 100;
 
 
 Product.prototype.render = function (position){
@@ -55,10 +55,7 @@ function selectProducts() {
         }
     }
     for (let i = 0; i < Product.lastValues.length; i += 1){
-        while(Product.left === Product.cntr){
-            Product.cntr = randomProduct();
-        }
-        while (Product.cntr === Product.lastValues[i]){
+        while(Product.cntr === Product.left || Product.cntr === Product.lastValues[i]){
             if (i === 0){
                 Product.cntr = randomProduct();
             } else{
@@ -68,10 +65,7 @@ function selectProducts() {
         }
     }
     for (let i = 0; i < Product.lastValues.length; i += 1){
-        while(Product.right === Product.left || Product.right === Product.cntr){
-            Product.right = randomProduct();
-        }
-        while (Product.right === Product.lastValues[i]){
+        while(Product.right === Product.left || Product.right === Product.cntr || Product.right === Product.lastValues[i]){
             if (i === 0){
                 Product.right = randomProduct();
             } else{
@@ -111,6 +105,7 @@ function handleProductSurvey(event) {
             renderProducts();
         } 
     } else {
+        storage();
         removeProductEventListener();
         addViewResultsBtn();     
     }
