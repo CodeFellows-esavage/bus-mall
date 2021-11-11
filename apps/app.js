@@ -14,8 +14,8 @@ Product.left = null;
 Product.cntr = null;
 Product.right = null;
 Product.lastValues = [];
-Product.currentRound = 0;
-Product.ttlRounds = 100;
+Product.currentRound = 1;
+Product.ttlRounds = 25;
 
 
 Product.prototype.render = function (position){
@@ -76,11 +76,13 @@ function selectProducts() {
     } 
 }   
 
-
-function renderProducts () {
+function percentComplete() {
     const progress = document.getElementById('progress-tracker');
-    progress.textContent = `${Product.currentRound} image sets out of ${Product.ttlRounds} complete`;
+    progress.textContent = `Viewing Product Set: ${Product.currentRound} of ${Product.ttlRounds}`;
+}
 
+function renderProducts() {
+    percentComplete();
     selectProducts();
     Product.left.render('left');
     Product.cntr.render('cntr');
@@ -90,7 +92,7 @@ function renderProducts () {
 function handleProductSurvey(event) {
     const id = event.target.id;
 
-    if (Product.currentRound < Product.ttlRounds){
+    if (Product.currentRound <= Product.ttlRounds - 1){ //0, click - 1, click - 2, click - 3, click - 4, click - 5
         if(id === 'left-position'){
             Product.left.countClicked += 1;
             Product.currentRound += 1;
@@ -106,6 +108,7 @@ function handleProductSurvey(event) {
         } 
     } else {
         storage();
+        percentComplete();
         removeProductEventListener();
         addViewResultsBtn();     
     }
@@ -209,19 +212,19 @@ function genProducts() {
     new Product('boots', 'jpg');
     new Product('breakfast', 'jpg');
     new Product('bubblegum', 'jpg');
-    // new Product('chair', 'jpg');
-    // new Product('cthulhu', 'jpg');
-    // new Product('dog-duck', 'jpg');
-    // new Product('dragon', 'jpg');
-    // new Product('pen', 'jpg');
-    // new Product('pet-sweep', 'jpg');
-    // new Product('scissors', 'jpg');
-    // new Product('shark', 'jpg');
-    // new Product('sweep', 'png');
-    // new Product('tauntaun', 'jpg');
-    // new Product('unicorn', 'jpg');
-    // new Product('water-can', 'jpg');
-    // new Product('wine-glass', 'jpg');
+    new Product('chair', 'jpg');
+    new Product('cthulhu', 'jpg');
+    new Product('dog-duck', 'jpg');
+    new Product('dragon', 'jpg');
+    new Product('pen', 'jpg');
+    new Product('pet-sweep', 'jpg');
+    new Product('scissors', 'jpg');
+    new Product('shark', 'jpg');
+    new Product('sweep', 'png');
+    new Product('tauntaun', 'jpg');
+    new Product('unicorn', 'jpg');
+    new Product('water-can', 'jpg');
+    new Product('wine-glass', 'jpg');
 }
 
 //Execution order
