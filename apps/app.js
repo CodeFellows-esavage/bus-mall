@@ -116,6 +116,26 @@ function handleProductSurvey(event) {
     }
 }
 
+function checkForStored(){
+    let localProducts = JSON.parse(localStorage.getItem('GOATS'));
+
+    if (localProducts){
+        for (let i = 0; i < localProducts.length; i++){
+            let filePath = localProducts[i].imgPath;
+            
+            new Product (`${localProducts[i].productName}`, `${filePath.slice(filePath.length - 3, filePath.length)}`);
+            Product.list[i].countClicked = localProducts[i].countClicked;
+            Product.list[i].countViewed = localProducts[i].countViewed;
+        }
+    } else{
+        genProducts();
+    }
+}
+
+function storage() {
+    localStorage.setItem('GOATS', JSON.stringify(Product.list));
+    }
+
 function addProductEventListener() {
     const allImages = document.getElementById('product-images');
     allImages.addEventListener('click', handleProductSurvey);
@@ -210,7 +230,8 @@ function genProducts() {
 }
 
 //Execution order
-genProducts();
+// genProducts();
+checkForStored();
 addProductEventListener();
 renderProducts();
 
