@@ -1,9 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap");
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 200px 1000px;
+  grid-template-rows: 50px 300px 300px;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 body {
   color: blue;
+  font-family: "Antic Didone", serif;
+}
+
+h1 {
+  font-size: 50px;
+  text-align: center;
+}
+
+#product-images {
+  grid-column: 2 / 3;
+}
+
+#results-chart-section {
+  grid-column: 2 / 3;
+}
+
+#progress-tracker {
+  text-align: center;
+}
+header img {
+  display: block;
+  float: left;
+}
+
+header {
+  height: 50px;
 }
 
 main img {
   width: 250px;
+  height: 250px;
 }
 
 .hidden {
