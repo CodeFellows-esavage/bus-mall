@@ -45,6 +45,17 @@ header {
 main img {
   width: 250px;
   height: 250px;
+  transition-duration: 0.15s;
+}
+
+main img:hover {
+  width: 275px;
+  height: 275px;
+}
+
+main img:active {
+  width: 250px;
+  height: 250px;
 }
 
 .hidden {
