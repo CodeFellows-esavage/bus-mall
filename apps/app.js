@@ -14,8 +14,8 @@ Product.left = null;
 Product.cntr = null;
 Product.right = null;
 Product.lastValues = [];
-Product.currentRound = 0;
-Product.ttlRounds = 5;
+Product.currentRound = 1;
+Product.ttlRounds = 25;
 
 
 Product.prototype.render = function (position){
@@ -55,10 +55,7 @@ function selectProducts() {
         }
     }
     for (let i = 0; i < Product.lastValues.length; i += 1){
-        while(Product.left === Product.cntr){
-            Product.cntr = randomProduct();
-        }
-        while (Product.cntr === Product.lastValues[i]){
+        while(Product.cntr === Product.left || Product.cntr === Product.lastValues[i]){
             if (i === 0){
                 Product.cntr = randomProduct();
             } else{
@@ -68,10 +65,7 @@ function selectProducts() {
         }
     }
     for (let i = 0; i < Product.lastValues.length; i += 1){
-        while(Product.right === Product.left || Product.right === Product.cntr){
-            Product.right = randomProduct();
-        }
-        while (Product.right === Product.lastValues[i]){
+        while(Product.right === Product.left || Product.right === Product.cntr || Product.right === Product.lastValues[i]){
             if (i === 0){
                 Product.right = randomProduct();
             } else{
@@ -82,11 +76,13 @@ function selectProducts() {
     } 
 }   
 
-
-function renderProducts () {
+function percentComplete() {
     const progress = document.getElementById('progress-tracker');
-    progress.textContent = `${Product.currentRound} image sets out of ${Product.ttlRounds} complete`;
+    progress.textContent = `Viewing Product Set: ${Product.currentRound} of ${Product.ttlRounds}`;
+}
 
+function renderProducts() {
+    percentComplete();
     selectProducts();
     Product.left.render('left');
     Product.cntr.render('cntr');
@@ -96,7 +92,7 @@ function renderProducts () {
 function handleProductSurvey(event) {
     const id = event.target.id;
 
-    if (Product.currentRound < Product.ttlRounds){
+    if (Product.currentRound <= Product.ttlRounds - 1){ //0, click - 1, click - 2, click - 3, click - 4, click - 5
         if(id === 'left-position'){
             Product.left.countClicked += 1;
             Product.currentRound += 1;
@@ -111,10 +107,32 @@ function handleProductSurvey(event) {
             renderProducts();
         } 
     } else {
+        storage();
+        percentComplete();
         removeProductEventListener();
         addViewResultsBtn();     
     }
 }
+
+function checkForStored(){
+    let localProducts = JSON.parse(localStorage.getItem('GOATS'));
+
+    if (localProducts){
+        for (let i = 0; i < localProducts.length; i++){
+            let filePath = localProducts[i].imgPath;
+            
+            new Product (`${localProducts[i].productName}`, `${filePath.slice(filePath.length - 3, filePath.length)}`);
+            Product.list[i].countClicked = localProducts[i].countClicked;
+            Product.list[i].countViewed = localProducts[i].countViewed;
+        }
+    } else{
+        genProducts();
+    }
+}
+
+function storage() {
+    localStorage.setItem('GOATS', JSON.stringify(Product.list));
+    }
 
 function addProductEventListener() {
     const allImages = document.getElementById('product-images');
@@ -194,23 +212,24 @@ function genProducts() {
     new Product('boots', 'jpg');
     new Product('breakfast', 'jpg');
     new Product('bubblegum', 'jpg');
-    // new Product('chair', 'jpg');
-    // new Product('cthulhu', 'jpg');
-    // new Product('dog-duck', 'jpg');
-    // new Product('dragon', 'jpg');
-    // new Product('pen', 'jpg');
-    // new Product('pet-sweep', 'jpg');
-    // new Product('scissors', 'jpg');
-    // new Product('shark', 'jpg');
-    // new Product('sweep', 'png');
-    // new Product('tauntaun', 'jpg');
-    // new Product('unicorn', 'jpg');
-    // new Product('water-can', 'jpg');
-    // new Product('wine-glass', 'jpg');
+    new Product('chair', 'jpg');
+    new Product('cthulhu', 'jpg');
+    new Product('dog-duck', 'jpg');
+    new Product('dragon', 'jpg');
+    new Product('pen', 'jpg');
+    new Product('pet-sweep', 'jpg');
+    new Product('scissors', 'jpg');
+    new Product('shark', 'jpg');
+    new Product('sweep', 'png');
+    new Product('tauntaun', 'jpg');
+    new Product('unicorn', 'jpg');
+    new Product('water-can', 'jpg');
+    new Product('wine-glass', 'jpg');
 }
 
 //Execution order
-genProducts();
+// genProducts();
+checkForStored();
 addProductEventListener();
 renderProducts();
 
