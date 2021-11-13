@@ -156,7 +156,7 @@ function renderResults() {
     for(let i = 0; i < Product.list.length; i += 1){
         const liEl = document.createElement('li');
         ulEl.appendChild(liEl);
-        liEl.textContent = `${Product.list[i].productName} had ${Product.list[i].countClicked} votes, and was seen ${Product.list[i].countViewed} times.`
+        liEl.textContent = `${Product.list[i].productName} - Votes: (${Product.list[i].countClicked}),  Views: (${Product.list[i].countViewed})`
     }
     renderChart();
 }
@@ -174,7 +174,7 @@ function renderChart(){
 
     const context = document.getElementById('results-chart').getContext('2d');
     const productChart = new Chart(context, {
-        type: 'horizontalBar',
+        type: 'bar', //'horizontalBar'
 
         data: {
             labels: productNames,
@@ -194,6 +194,7 @@ function renderChart(){
             ]
         },
         options: {
+            responsive: true,
             scales: {
                 yAxes: [{
                     ticks: {
